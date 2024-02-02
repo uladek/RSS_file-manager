@@ -1,24 +1,18 @@
 import readline from 'readline';
 import path from 'path';
 import { redErrorMessage } from './utils/redMessage.js';
+import { printWelcomeMessage, username  } from './greeting/greetings.js';
+import {  printWorkingDirectory } from './directory/workDirectory.js';
+
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-const [, , fullStringName] = process.argv;
-const [, username] = fullStringName.split('=');
 
-export let workingDirectory = process.cwd();
-
-function printWelcomeMessage() {
-  console.log(`Welcome to the File Manager, ${username}!`);
-}
-
-function printWorkingDirectory() {
-    console.log(`You are currently in ${workingDirectory}`);
-  }
+printWelcomeMessage();
+printWorkingDirectory();
 
 function printGoodbyeMessage() {
   console.log(`Thank you for using File Manager, ${username}, goodbye!`);
@@ -43,11 +37,12 @@ function processUserInput(input) {
       promptUser();
       break;
 // up
-      case 'up':
-      case 'cd ..':
-      navigateToParentDirectory();
-      promptUser();
+
+    case 'up':
+    case 'cd ..':
+       navigateUp();
       break;
+
 
     default:
       printErrorMessage(`Unknown operation "${command}"`);
@@ -56,23 +51,27 @@ function processUserInput(input) {
   }
 }
 
-function navigateToParentDirectory() {
-  const parentDirectory = path.resolve(workingDirectory, '..');
+function navigateUp() {
+    const currentDirectory = process.cwd();
+    // const parentDirectory = path.dirname(currentDirectory);
+    const parentDirectory = path.resolve(currentDirectory, '..');
 
-  if (path.relative(parentDirectory, path.sep) === '') {
-    printErrorMessage('Cannot go above the root directory.');
-  } else {
-    workingDirectory = parentDirectory;
-    printWorkingDirectory();
+    if (parentDirectory === currentDirectory) {
+      printErrorMessage('Cannot go above the root directory.');
+      promptUser();
+    } else {
+      process.chdir(parentDirectory);
+      printWorkingDirectory();
+      promptUser();
+    }
   }
-}
+
 
 function printErrorMessage(message) {
   redErrorMessage(`Error: ${message}`, '31');
 }
 
-printWelcomeMessage();
-printWorkingDirectory();
+
 promptUser();
 
 rl.on('close', () => {
