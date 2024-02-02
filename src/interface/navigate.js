@@ -1,10 +1,8 @@
 
 import path from 'path';
 import { promptUser } from '../greeting/start.js';
-import { printWorkingDirectory } from '../directory/workDirectory.js';
+import {  printCurrentDirectory } from '../directory/workDirectory.js';
 import {  printErrorMessage } from '../commands/commands.js';
-
-
 
 
 export const navigateUp = () => {
@@ -14,10 +12,11 @@ export const navigateUp = () => {
 
     if (parentDirectory === currentDirectory) {
       printErrorMessage('Cannot go above the root directory.');
-      promptUser();
+    //   printCurrentDirectory();
+    //   promptUser();
     } else {
       process.chdir(parentDirectory);
-      printWorkingDirectory();
-      promptUser();
+    //   printCurrentDirectory();
+    //   promptUser();
     }
   }
