@@ -19,5 +19,6 @@ export const  printWelcomeMessage = () => {
 export const promptUser = () => {
     rl.question('Please enter your command: ', (input) => {
       processUserInput(input);
+
     });
   }

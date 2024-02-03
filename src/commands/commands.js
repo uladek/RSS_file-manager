@@ -1,15 +1,18 @@
 import { redErrorMessage } from '../utils/redMessage.js';
-import { printGoodbyeMessage, promptUser } from '../greeting/start.js';
+import {  promptUser } from '../greeting/start.js';
 import { navigateUp, navigateToDirectory  } from '../interface/navigate.js';
+import { listDirectoryContent  } from '../commands/list.js';
+
 import { rl } from '../interface/readline.js';
 import {  printCurrentDirectory } from '../directory/workDirectory.js';
 
 
-export const processUserInput = (input) => {
+export const processUserInput = async (input) => {
   const command = input.trim().toLowerCase();
   const args = command.split(' ');
 
   switch (args[0]) {
+
     case '.exit':
       // printGoodbyeMessage();
       rl.close();
@@ -19,12 +22,14 @@ export const processUserInput = (input) => {
       printCurrentDirectory();
       promptUser();
       break;
+
     case 'up':
     case 'cd ..':
       navigateUp();
       printCurrentDirectory();
       promptUser();
       break;
+
     case 'cd':
       if (args.length > 1) {
         const directoryPath = args.slice(1).join(' ');
@@ -35,12 +40,20 @@ export const processUserInput = (input) => {
       printCurrentDirectory();
       promptUser();
       break;
+
+    case 'ls':
+      printCurrentDirectory();
+      await listDirectoryContent();
+      promptUser();
+      break;
+
     default:
       printErrorMessage(`Unknown operation "${command}"`);
       printCurrentDirectory();
       promptUser();
       break;
   }
+
 }
 
 
