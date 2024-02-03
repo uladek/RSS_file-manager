@@ -3,6 +3,8 @@ import {  promptUser } from '../greeting/start.js';
 import { navigateUp, navigateToDirectory  } from '../interface/navigate.js';
 import { listDirectoryContent  } from '../commands/list.js';
 import { catFile  } from '../commands/cat.js';
+import { createEmptyFile } from '../commands/add.js';
+
 
 
 import { rl } from '../interface/readline.js';
@@ -32,18 +34,8 @@ export const processUserInput = async (input) => {
       promptUser();
       break;
 
-    // case 'cd':
-    //   if (args.length > 1) {
-    //     const directoryPath = args.slice(1).join(' ');
-    //     navigateToDirectory(directoryPath);
-    //   } else {
-    //     printErrorMessage('Invalid input. Please provide a directory path.');
-    //   }
-    //   printCurrentDirectory();
-    //   promptUser();
-    //   break;
 
-  case 'cd':
+   case 'cd':
     if (args.length > 1) {
       const directoryPath = args.slice(1).join(' ');
       try {
@@ -57,8 +49,6 @@ export const processUserInput = async (input) => {
     printCurrentDirectory();
     promptUser();
     break;
-
-
 
     case 'ls':
       await listDirectoryContent();
@@ -81,6 +71,22 @@ export const processUserInput = async (input) => {
         printCurrentDirectory();
         promptUser();
         break;
+
+    case 'add':
+      if (args.length !== 2) {
+        printErrorMessage('Invalid usage of "add" command. Please provide a new filename.');
+      } else {
+        const newFilename = args[1];
+        try {
+          await createEmptyFile(newFilename);
+        } catch (error) {
+          printErrorMessage(`${error}`);
+
+        }
+      }
+      printCurrentDirectory();
+      promptUser();
+      break;
 
     default:
       printErrorMessage(`Unknown operation "${command}"`);
