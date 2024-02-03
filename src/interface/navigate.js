@@ -1,4 +1,3 @@
-
 import path from 'path';
 import {  printErrorMessage } from '../commands/commands.js';
 
@@ -14,7 +13,6 @@ export const navigateUp = () => {
     }
   }
 
-
   export const navigateToDirectory = (directoryPath) => {
     const currentDirectory = process.cwd();
     const targetDirectory = path.resolve(currentDirectory, directoryPath);
@@ -22,6 +20,7 @@ export const navigateUp = () => {
     try {
       process.chdir(targetDirectory);
     } catch (error) {
-      printErrorMessage(`Error navigating to directory "${directoryPath}": ${error.message}`);
+      const errorMessage = `Error navigating to directory "${directoryPath}": ${error.message}`;
+      printErrorMessage(`Operation Failed: ${errorMessage}`);
     }
   }

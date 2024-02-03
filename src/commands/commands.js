@@ -32,16 +32,33 @@ export const processUserInput = async (input) => {
       promptUser();
       break;
 
-    case 'cd':
-      if (args.length > 1) {
-        const directoryPath = args.slice(1).join(' ');
+    // case 'cd':
+    //   if (args.length > 1) {
+    //     const directoryPath = args.slice(1).join(' ');
+    //     navigateToDirectory(directoryPath);
+    //   } else {
+    //     printErrorMessage('Invalid input. Please provide a directory path.');
+    //   }
+    //   printCurrentDirectory();
+    //   promptUser();
+    //   break;
+
+  case 'cd':
+    if (args.length > 1) {
+      const directoryPath = args.slice(1).join(' ');
+      try {
         navigateToDirectory(directoryPath);
-      } else {
-        printErrorMessage('Invalid usage. Please provide a directory path.');
+      } catch (error) {
+        printErrorMessage(`Operation Failed: ${error}`);
       }
-      printCurrentDirectory();
-      promptUser();
-      break;
+    } else {
+      printErrorMessage('Invalid input. Please provide a directory path.');
+    }
+    printCurrentDirectory();
+    promptUser();
+    break;
+
+
 
     case 'ls':
       await listDirectoryContent();
@@ -50,16 +67,20 @@ export const processUserInput = async (input) => {
       break;
 
     case 'cat':
-      const catArgs = input.split(' ');
-      if (catArgs.length !== 2) {
-        printErrorMessage('Invalid usage of "cat" command. Please provide a file path.');
-      } else {
-        const filePath = args[1];
-       await catFile(filePath);
-      }
-      printCurrentDirectory();
-      promptUser();
-      break;
+        const catArgs = input.split(' ');
+        if (catArgs.length !== 2) {
+          printErrorMessage('Invalid input of "cat" command. Please provide a file path.');
+        } else {
+          const filePath = catArgs[1];
+          try {
+            await catFile(filePath);
+          } catch (error) {
+            printErrorMessage(`Operation Failed: ${error}`);
+          }
+        }
+        printCurrentDirectory();
+        promptUser();
+        break;
 
     default:
       printErrorMessage(`Unknown operation "${command}"`);
