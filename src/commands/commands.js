@@ -2,6 +2,8 @@ import { redErrorMessage } from '../utils/redMessage.js';
 import {  promptUser } from '../greeting/start.js';
 import { navigateUp, navigateToDirectory  } from '../interface/navigate.js';
 import { listDirectoryContent  } from '../commands/list.js';
+import { catFile  } from '../commands/cat.js';
+
 
 import { rl } from '../interface/readline.js';
 import {  printCurrentDirectory } from '../directory/workDirectory.js';
@@ -18,7 +20,7 @@ export const processUserInput = async (input) => {
       rl.close();
       break;
     case '':
-      printErrorMessage('Empty input. Please enter a command.');
+      printErrorMessage('Empty input. Please enter command.');
       printCurrentDirectory();
       promptUser();
       break;
@@ -42,8 +44,20 @@ export const processUserInput = async (input) => {
       break;
 
     case 'ls':
-      printCurrentDirectory();
       await listDirectoryContent();
+      printCurrentDirectory();
+      promptUser();
+      break;
+
+    case 'cat':
+      const catArgs = input.split(' ');
+      if (catArgs.length !== 2) {
+        printErrorMessage('Invalid usage of "cat" command. Please provide a file path.');
+      } else {
+        const filePath = args[1];
+       await catFile(filePath);
+      }
+      printCurrentDirectory();
       promptUser();
       break;
 

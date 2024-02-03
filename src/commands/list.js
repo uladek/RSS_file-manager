@@ -12,7 +12,6 @@ export const listDirectoryContent = async () => {
       directoryContent.map(async (item) => {
         const fullPath = path.join(currentDirectory, item);
         const stats = await stat(fullPath);
-        console.log('stats: ', stats);
 
         const itemType = stats.isDirectory() ? 'Directory' : 'File';
         items.push({ Name: item, Type: itemType });
