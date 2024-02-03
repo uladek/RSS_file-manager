@@ -1,16 +1,17 @@
 import { redErrorMessage } from '../utils/redMessage.js';
 import { printGoodbyeMessage, promptUser } from '../greeting/start.js';
-import { navigateUp } from '../interface/navigate.js';
+import { navigateUp, navigateToDirectory  } from '../interface/navigate.js';
 import { rl } from '../interface/readline.js';
 import {  printCurrentDirectory } from '../directory/workDirectory.js';
 
 
 export const processUserInput = (input) => {
   const command = input.trim().toLowerCase();
+  const args = command.split(' ');
 
-  switch (command) {
+  switch (args[0]) {
     case '.exit':
-      printGoodbyeMessage();
+      // printGoodbyeMessage();
       rl.close();
       break;
     case '':
@@ -18,23 +19,30 @@ export const processUserInput = (input) => {
       printCurrentDirectory();
       promptUser();
       break;
-// up
-
     case 'up':
     case 'cd ..':
-       navigateUp();
-       printCurrentDirectory();
-       promptUser();
+      navigateUp();
+      printCurrentDirectory();
+      promptUser();
       break;
-
+    case 'cd':
+      if (args.length > 1) {
+        const directoryPath = args.slice(1).join(' ');
+        navigateToDirectory(directoryPath);
+      } else {
+        printErrorMessage('Invalid usage. Please provide a directory path.');
+      }
+      printCurrentDirectory();
+      promptUser();
+      break;
     default:
       printErrorMessage(`Unknown operation "${command}"`);
-
       printCurrentDirectory();
       promptUser();
       break;
   }
 }
+
 
 export const printErrorMessage = (message) => {
     redErrorMessage(`Error: ${message}`, '31');
