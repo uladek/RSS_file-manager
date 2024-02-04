@@ -16,9 +16,9 @@ export const catFile = async (filePath) => {
       resolve();
     });
 
-    readStream.on('error', (error) => {
-      console.error(`Error reading file: ${error.message}`);
-      reject(error);
-    });
+    // readStream.on('error', (error) => {
+    //   console.error(`Error reading file: ${error.message}`);
+    //   reject(error);
+    // });
   });
 };

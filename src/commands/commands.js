@@ -140,5 +140,5 @@ export const processUserInput = async (input) => {
 }
 
 export const printErrorMessage = (message) => {
-    redErrorMessage(`Error: ${message}`, '31');
+    redErrorMessage(`${message}`, '31');
   }
