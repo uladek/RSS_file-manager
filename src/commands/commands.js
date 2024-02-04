@@ -5,6 +5,8 @@ import { listDirectoryContent  } from '../commands/list.js';
 import { catFile  } from '../commands/cat.js';
 import { createEmptyFile } from '../commands/add.js';
 import { renameFile } from '../commands/rename.js';
+import { cp } from '../commands/copy.js';
+
 
 
 import { rl } from '../interface/readline.js';
@@ -18,7 +20,6 @@ export const processUserInput = async (input) => {
   switch (args[0]) {
 
     case '.exit':
-      // printGoodbyeMessage();
       rl.close();
       break;
     case '':
@@ -99,6 +100,19 @@ case 'rn':
         // } catch (error) {
         //   printErrorMessage(`${error}`);
         // }
+      }
+      printCurrentDirectory();
+      promptUser();
+      break;
+
+  // copy
+    case 'cp':
+      if (args.length !== 3) {
+        printErrorMessage('Invalid usage of "cp" command. Please provide a source file path and a target directory path.');
+      } else {
+        const sourcePath = args[1];
+        const targetDirectory = args[2];
+        await cp(sourcePath, targetDirectory);
       }
       printCurrentDirectory();
       promptUser();
