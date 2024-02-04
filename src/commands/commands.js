@@ -5,8 +5,7 @@ import { listDirectoryContent  } from '../commands/list.js';
 import { catFile  } from '../commands/cat.js';
 import { createEmptyFile } from '../commands/add.js';
 import { renameFile } from '../commands/rename.js';
-import { cp } from '../commands/copy.js';
-
+import { cp, mv } from '../commands/copyMove.js';
 
 
 import { rl } from '../interface/readline.js';
@@ -88,7 +87,7 @@ export const processUserInput = async (input) => {
       promptUser();
       break;
 // rename
-case 'rn':
+ case 'rn':
       if (args.length !== 3) {
         printErrorMessage('Invalid usage of "rn" command. Please provide a file path and a new filename.');
       } else {
@@ -105,8 +104,8 @@ case 'rn':
       promptUser();
       break;
 
-  // copy
-    case 'cp':
+// copy
+  case 'cp':
       if (args.length !== 3) {
         printErrorMessage('Invalid usage of "cp" command. Please provide a source file path and a target directory path.');
       } else {
@@ -118,6 +117,20 @@ case 'rn':
       promptUser();
       break;
 
+// move
+  case 'mv':
+      if (args.length !== 3) {
+        printErrorMessage('Invalid usage of "mv" command. Please provide a source file path and a target directory path.');
+      } else {
+        const sourcePath = args[1];
+        const targetDirectory = args[2];
+        await mv(sourcePath, targetDirectory);
+      }
+      printCurrentDirectory();
+      promptUser();
+      break;
+
+//default
     default:
       printErrorMessage(`Unknown operation "${command}"`);
       printCurrentDirectory();

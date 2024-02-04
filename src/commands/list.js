@@ -1,5 +1,6 @@
 import path from 'path';
 import { readdir, stat } from 'node:fs/promises';
+import { printErrorMessage } from '../commands/commands.js';
 
 export const listDirectoryContent = async () => {
   try {
@@ -22,7 +23,9 @@ export const listDirectoryContent = async () => {
 
      console.table(items);
 
+
   } catch (error) {
-    console.error(`Error listing directory content: ${error.message}`);
+    printErrorMessage(`Operation Failed. Error listing directory content: ${error.message}`);
+
   }
 };
