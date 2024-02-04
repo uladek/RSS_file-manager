@@ -1,41 +1,46 @@
-import { createReadStream, createWriteStream } from 'node:fs';
+import { createReadStream, createWriteStream, promises as fsPromises } from 'node:fs';
 
 import { printErrorMessage } from '../commands/commands.js';
-import {  promptUser } from '../greeting/start.js';
 import { unlink } from 'node:fs/promises';
 
-
-
-
 export const cp = async (sourcePath, targetDirectory) => {
-  return new Promise((resolve) => {
-    const sourceStream = createReadStream(sourcePath);
+  return new Promise(async (resolve) => {
     const targetPath = `${targetDirectory}/${sourcePath.split('/').pop()}`;
-    const targetStream = createWriteStream(targetPath);
 
-    let hasError = false;
-
-    const errorHandler = (error) => {
-      if (!hasError) {
-        hasError = true;
-        printErrorMessage(`Operation Failed: ${error.message}`);
-        resolve();
-      }
-    };
-
-    sourceStream.on('error', errorHandler);
-    targetStream.on('error', errorHandler);
-
-    targetStream.on('finish', () => {
-      if (!hasError) {
-        console.log(`File copied successfully to ${targetPath}`);
-      }
+    try {
+      await fsPromises.access(targetPath);
+      printErrorMessage(`Operation Failed: File "${targetPath}" already exists in the target directory.`);
       resolve();
-    });
+    } catch (error) {
+      const sourceStream = createReadStream(sourcePath);
+      const targetStream = createWriteStream(targetPath);
 
-    sourceStream.pipe(targetStream);
+      let hasError = false;
+
+      const errorHandler = (error) => {
+        if (!hasError) {
+          hasError = true;
+          printErrorMessage(`Operation Failed: ${error.message}`);
+          resolve();
+        }
+      };
+
+      sourceStream.on('error', errorHandler);
+      targetStream.on('error', errorHandler);
+
+      targetStream.on('finish', () => {
+        if (!hasError) {
+          console.log(`File copied successfully to ${targetPath}`);
+        }
+        resolve();
+      });
+
+      sourceStream.pipe(targetStream);
+    }
   });
 };
+
+
 
 
 export const mv = async (sourcePath, targetDirectory) => {
