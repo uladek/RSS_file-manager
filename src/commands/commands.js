@@ -4,7 +4,7 @@ import { navigateUp, navigateToDirectory  } from '../interface/navigate.js';
 import { listDirectoryContent  } from '../commands/list.js';
 import { catFile  } from '../commands/cat.js';
 import { createEmptyFile } from '../commands/add.js';
-
+import { renameFile } from '../commands/rename.js';
 
 
 import { rl } from '../interface/readline.js';
@@ -71,18 +71,34 @@ export const processUserInput = async (input) => {
         printCurrentDirectory();
         promptUser();
         break;
-
+// add
     case 'add':
       if (args.length !== 2) {
         printErrorMessage('Invalid usage of "add" command. Please provide a new filename.');
       } else {
         const newFilename = args[1];
-        try {
+        // try {
           await createEmptyFile(newFilename);
-        } catch (error) {
-          printErrorMessage(`${error}`);
-
-        }
+        // } catch (error) {
+        //   printErrorMessage(`${error}`);
+        // }
+      }
+      printCurrentDirectory();
+      promptUser();
+      break;
+// rename
+case 'rn':
+      if (args.length !== 3) {
+        printErrorMessage('Invalid usage of "rn" command. Please provide a file path and a new filename.');
+      } else {
+        // console.log("args", args)
+        const filePath = args[1];
+        const newFilename = args[2];
+        // try {
+          await renameFile(filePath, newFilename);
+        // } catch (error) {
+        //   printErrorMessage(`${error}`);
+        // }
       }
       printCurrentDirectory();
       promptUser();
@@ -94,9 +110,7 @@ export const processUserInput = async (input) => {
       promptUser();
       break;
   }
-
 }
-
 
 export const printErrorMessage = (message) => {
     redErrorMessage(`Error: ${message}`, '31');
