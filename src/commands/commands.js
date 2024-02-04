@@ -66,7 +66,7 @@ export const processUserInput = async (input) => {
           try {
             await catFile(filePath);
           } catch (error) {
-            printErrorMessage(`Operation Failed: ${error}`);
+            printErrorMessage(`Operation Failed: ${error}, no such ${filePath}`);
           }
         }
         printCurrentDirectory();
