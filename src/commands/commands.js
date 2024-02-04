@@ -11,7 +11,6 @@ import { cp, mv } from '../commands/copyMove.js';
 import { rl } from '../interface/readline.js';
 import {  printCurrentDirectory } from '../directory/workDirectory.js';
 
-
 export const processUserInput = async (input) => {
   const command = input.trim().toLowerCase();
   const args = command.split(' ');
@@ -22,11 +21,12 @@ export const processUserInput = async (input) => {
       rl.close();
       break;
     case '':
-      printErrorMessage('Empty input. Please enter command.');
+      printErrorMessage('Operation failed. Empty input. Please enter command.');
       printCurrentDirectory();
       promptUser();
       break;
 
+// up
     case 'up':
     case 'cd ..':
       navigateUp();
@@ -34,7 +34,7 @@ export const processUserInput = async (input) => {
       promptUser();
       break;
 
-
+// cd
    case 'cd':
     if (args.length > 1) {
       const directoryPath = args.slice(1).join(' ');
@@ -44,52 +44,51 @@ export const processUserInput = async (input) => {
         printErrorMessage(`Operation Failed: ${error}`);
       }
     } else {
-      printErrorMessage('Invalid input. Please provide a directory path.');
+      printErrorMessage('Operation failed. Invalid input. Please provide a directory path.');
     }
     printCurrentDirectory();
     promptUser();
     break;
 
+  // ls
     case 'ls':
       await listDirectoryContent();
       printCurrentDirectory();
       promptUser();
       break;
 
+ // cat
     case 'cat':
-        const catArgs = input.split(' ');
-        if (catArgs.length !== 2) {
-          printErrorMessage('Invalid input of "cat" command. Please provide a file path.');
-        } else {
-          const filePath = catArgs[1];
-          try {
-            await catFile(filePath);
-          } catch (error) {
-            printErrorMessage(`Operation Failed: ${error}, no such ${filePath}`);
-          }
-        }
-        printCurrentDirectory();
-        promptUser();
-        break;
-// add
-    case 'add':
-      if (args.length !== 2) {
-        printErrorMessage('Invalid usage of "add" command. Please provide a new filename.');
+      const catArgs = input.match(/cat\s+(.+)/);
+      if (!catArgs || catArgs.length !== 2) {
+        printErrorMessage('Operation failed .Invalid input of "cat" command. Please provide a valid file path.');
       } else {
-        const newFilename = args[1];
-        // try {
-          await createEmptyFile(newFilename);
-        // } catch (error) {
-        //   printErrorMessage(`${error}`);
-        // }
+        const filePath = catArgs[1];
+        try {
+          await catFile(filePath);
+        } catch (error) {
+          printErrorMessage(`Operation Failed: ${error.message}, no such file "${filePath}"`);
+        }
       }
       printCurrentDirectory();
       promptUser();
       break;
+
+    case 'add':
+      if (args.length < 2) {
+        printErrorMessage('Operation failed. Invalid usage of "add" command. Please provide a new filename.');
+      } else {
+        const newFilename = args.slice(1).join(' ');
+        await createEmptyFile(newFilename);
+      }
+      printCurrentDirectory();
+      promptUser();
+      break;
+
 // rename
  case 'rn':
       if (args.length !== 3) {
-        printErrorMessage('Invalid usage of "rn" command. Please provide a file path and a new filename.');
+        printErrorMessage('Operation failed. Invalid usage of "rn" command. Please provide a file path and a new filename.');
       } else {
         // console.log("args", args)
         const filePath = args[1];
@@ -107,7 +106,7 @@ export const processUserInput = async (input) => {
 // copy
   case 'cp':
       if (args.length !== 3) {
-        printErrorMessage('Invalid usage of "cp" command. Please provide a source file path and a target directory path.');
+        printErrorMessage('Operation failed. Invalid usage of "cp" command. Please provide a source file path and a target directory path.');
       } else {
         const sourcePath = args[1];
         const targetDirectory = args[2];
@@ -120,7 +119,7 @@ export const processUserInput = async (input) => {
 // move
   case 'mv':
       if (args.length !== 3) {
-        printErrorMessage('Invalid usage of "mv" command. Please provide a source file path and a target directory path.');
+        printErrorMessage('Operation failed. Invalid usage of "mv" command. Please provide a source file path and a target directory path.');
       } else {
         const sourcePath = args[1];
         const targetDirectory = args[2];
@@ -132,7 +131,7 @@ export const processUserInput = async (input) => {
 
 //default
     default:
-      printErrorMessage(`Unknown operation "${command}"`);
+      printErrorMessage(`Operation failed. Unknown operation "${command}"`);
       printCurrentDirectory();
       promptUser();
       break;

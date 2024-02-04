@@ -1,7 +1,7 @@
 import { createReadStream } from 'node:fs';
 
 export const catFile = async (filePath) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const readStream = createReadStream(filePath, 'utf-8');
     let content = '';
 
@@ -15,10 +15,5 @@ export const catFile = async (filePath) => {
       console.log('File reading completed.');
       resolve();
     });
-
-    // readStream.on('error', (error) => {
-    //   console.error(`Error reading file: ${error.message}`);
-    //   reject(error);
-    // });
   });
 };
