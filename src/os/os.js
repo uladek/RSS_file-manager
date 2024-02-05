@@ -8,15 +8,15 @@ export const printEOL = () => {
 
 export const printCPUsInfo = () => {
   const cpus = os.cpus();
+  const overallCPUs = cpus.length;
 
-  const cpuData = cpus.map((cpu, index) => ({
-    CPU: index + 1,
+  const cpuData = cpus.map((cpu) => ({
     Model: cpu.model,
-    'Clock Rate (GHz)': cpu.speed / 1000
+    'Clock Rate (GHz)':  cpu.speed / 1000
   }));
 
-  console.log('CPUs Info:');
-  console.table(cpuData, ['CPU', 'Model', 'Clock Rate (GHz)']);
+  console.log(`CPUs Info: Overall CPUs - ${overallCPUs}`);
+  console.table(cpuData, [ 'Model', 'Clock Rate (GHz)']);
 };
 
 

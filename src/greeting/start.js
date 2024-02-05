@@ -1,9 +1,8 @@
-const [, , fullStringName] = process.argv;
 import { rl } from '../interface/readline.js';
 import { processUserInput } from '../commands/commands.js';
 import {  printCurrentDirectory } from '../directory/workDirectory.js';
 
-
+const [, , fullStringName] = process.argv;
 
 export const [, username] = fullStringName.split('--username=');
 

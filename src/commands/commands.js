@@ -10,6 +10,7 @@ import { removeFile } from '../commands/remove.js';
 import { rl } from '../interface/readline.js';
 import { printCurrentDirectory } from '../directory/workDirectory.js';
 import { printEOL, printCPUsInfo, printHomeDir, printUsername , printCPUArchitecture  } from '../os/os.js';
+import { printFileHash } from '../hash/hash.js';
 
 
 
@@ -131,6 +132,15 @@ case 'rm':
   break;
 
 
+case 'hash':
+  processCommand(input, async (filePath) => {
+    try {
+      await printFileHash(filePath);
+    } catch (error) {
+      printErrorMessage(`Operation Failed: ${error}`);
+    }
+  }, 'hash', 2, 2);
+  break;
 
 //default
     default:
@@ -144,6 +154,7 @@ case 'rm':
 
 async function processCommand(input, operationFunction, commandName, minArgsLength, maxArgsLength) {
   const argsCommand = input.match(/(?:[^\s'"]+|"[^"]*"|'[^']*')+/g);
+  // const argsCommand = input.trim().match(/("[^"]+"|'[^']+'|\S+)/g);
   // console.log(argsCommand);
   if (argsCommand.length < minArgsLength || argsCommand.length > maxArgsLength) {
     printErrorMessage(`Operation failed. Invalid usage of "${commandName}" command. Please provide between ${minArgsLength - 1} and ${maxArgsLength - 1} arguments.`);
@@ -154,9 +165,11 @@ async function processCommand(input, operationFunction, commandName, minArgsLeng
   }
   printCurrentDirectory();
   console.log('\x1b[34m%s\x1b[0m', '-----');
+  // console.log('\x1b[34m%s\x1b[0m\n', '-----');
   promptUser();
 }
 
 export const printErrorMessage = (message) => {
     redErrorMessage(`${message}`, '31');
+
   }
