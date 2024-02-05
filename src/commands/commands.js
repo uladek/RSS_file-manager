@@ -85,36 +85,38 @@ export const processUserInput = async (input) => {
       promptUser();
       break;
 
-// rename
- case 'rn':
-      if (args.length !== 3) {
+  case 'rn':
+      if (args.length < 3) {
         printErrorMessage('Operation failed. Invalid usage of "rn" command. Please provide a file path and a new filename.');
       } else {
-        // console.log("args", args)
-        const filePath = args[1];
-        const newFilename = args[2];
-        // try {
-          await renameFile(filePath, newFilename);
-        // } catch (error) {
-        //   printErrorMessage(`${error}`);
-        // }
+        const filePath = args.slice(1, -1).join(' ');
+        const newFilename = args[args.length - 1];
+        await renameFile(filePath, newFilename);
       }
       printCurrentDirectory();
       promptUser();
       break;
 
+
 // copy
   case 'cp':
-      if (args.length !== 3) {
+    const args = input.match(/(?:[^\s"]+|"[^"]*")+|'[^']*'/g);
+
+    // console.log(args);
+    if (args.length < 3) {
         printErrorMessage('Operation failed. Invalid usage of "cp" command. Please provide a source file path and a target directory path.');
-      } else {
-        const sourcePath = args[1];
-        const targetDirectory = args[2];
+    } else {
+        const sourcePath = args[1].replace(/^['"]|['"]$/g, '');
+        // Удаляем оба типа кавычек
+        const targetDirectory = args[2].replace(/^['"]|['"]$/g, '');
         await cp(sourcePath, targetDirectory);
-      }
-      printCurrentDirectory();
-      promptUser();
-      break;
+    }
+    printCurrentDirectory();
+    promptUser();
+    break;
+
+
+
 
 // move
   case 'mv':
