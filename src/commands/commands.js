@@ -99,17 +99,47 @@ export const processUserInput = async (input) => {
 
 
 // copy
-  case 'cp':
-    const args = input.match(/(?:[^\s"]+|"[^"]*")+|'[^']*'/g);
+case 'cp':
+  const args = input.match(/(?:[^\s'"]+|"[^"]*"|'[^']*')+/g);
+  console.log(args);
+  if (args.length < 3) {
+      printErrorMessage('Operation failed. Invalid usage of "cp" command. Please provide a source file path and a target directory path.');
+  } else {
+      const sourcePath = args[1].replace(/^['"]|['"]$/g, '');
+      const targetDirectory = args[2].replace(/^['"]|['"]$/g, '');
+      await cp(sourcePath, targetDirectory);
+  }
+  printCurrentDirectory();
+  promptUser();
+  break;
 
-    // console.log(args);
-    if (args.length < 3) {
-        printErrorMessage('Operation failed. Invalid usage of "cp" command. Please provide a source file path and a target directory path.');
+
+
+// move
+  // case 'mv':
+  //     if (args.length !== 3) {
+  //       printErrorMessage('Operation failed. Invalid usage of "mv" command. Please provide a source file path and a target directory path.');
+  //     } else {
+  //       const sourcePath = args[1];
+  //       const targetDirectory = args[2];
+  //       await mv(sourcePath, targetDirectory);
+  //     }
+  //     printCurrentDirectory();
+  //     promptUser();
+  //     break;
+  case 'mv':
+    const argsMv = input.match(/(?:[^\s'"]+|'[^']*'|"[^"]*")+/g);
+
+    console.log(argsMv);
+    if (argsMv.length !== 3) {
+        printErrorMessage('Operation failed. Invalid usage of "mv" command. Please provide a source file path and a target directory path.');
     } else {
-        const sourcePath = args[1].replace(/^['"]|['"]$/g, '');
-        // Удаляем оба типа кавычек
-        const targetDirectory = args[2].replace(/^['"]|['"]$/g, '');
-        await cp(sourcePath, targetDirectory);
+        const sourcePathMv = argsMv[1].replace(/^['"]|['"]$/g, '');
+        const targetDirectoryMv = argsMv[2].replace(/^['"]|['"]$/g, '');
+
+        console.log("sourcePath", sourcePathMv);
+        console.log("targetDirectory", targetDirectoryMv);
+        await mv(sourcePathMv, targetDirectoryMv);
     }
     printCurrentDirectory();
     promptUser();
@@ -117,19 +147,6 @@ export const processUserInput = async (input) => {
 
 
 
-
-// move
-  case 'mv':
-      if (args.length !== 3) {
-        printErrorMessage('Operation failed. Invalid usage of "mv" command. Please provide a source file path and a target directory path.');
-      } else {
-        const sourcePath = args[1];
-        const targetDirectory = args[2];
-        await mv(sourcePath, targetDirectory);
-      }
-      printCurrentDirectory();
-      promptUser();
-      break;
 
 //default
     default:
