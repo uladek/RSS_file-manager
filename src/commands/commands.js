@@ -11,7 +11,8 @@ import { rl } from '../interface/readline.js';
 import { printCurrentDirectory } from '../directory/workDirectory.js';
 import { printEOL, printCPUsInfo, printHomeDir, printUsername , printCPUArchitecture  } from '../os/os.js';
 import { printFileHash } from '../hash/hash.js';
-
+import { compressFile } from '../brotli/compress.js'
+import { decompressFile } from '../brotli/decompress.js'
 
 
 export const processUserInput = async (input) => {
@@ -86,8 +87,7 @@ case 'cp':
 case 'mv':
   processCommand(input, mv, 'mv', 2, 3);
   break;
-
-// Remove
+  // Remove
 case 'rm':
   processCommand(input, async (filePath) => {
     try {
@@ -142,6 +142,16 @@ case 'hash':
   }, 'hash', 2, 2);
   break;
 
+  // compress
+  case 'compress':
+    processCommand(input, compressFile, 'compress', 3, 3);
+    break;
+
+  // compress
+  case 'decompress':
+    processCommand(input, decompressFile, 'compress', 3, 3);
+    break;
+
 //default
     default:
       printErrorMessage(`Operation failed. Unknown operation "${command}"`);
@@ -173,3 +183,4 @@ export const printErrorMessage = (message) => {
     redErrorMessage(`${message}`, '31');
 
   }
+ima
