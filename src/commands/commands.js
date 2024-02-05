@@ -52,22 +52,31 @@ export const processUserInput = async (input) => {
   //   break;
   // ...
 
-  case 'cd':
-    if (args.length > 1) {
-        const directoryPath = args.slice(1).join(' ');
-        try {
-            navigateToDirectory(directoryPath);
-        } catch (error) {
-            printErrorMessage(`Operation Failed: ${error}`);
-        }
-    } else {
-        printErrorMessage('Operation failed. Invalid input. Please provide a directory path.');
+  // case 'cd':
+  //   if (args.length > 1) {
+  //       const directoryPath = args.slice(1).join(' ');
+  //       try {
+  //           navigateToDirectory(directoryPath);
+  //       } catch (error) {
+  //           printErrorMessage(`Operation Failed: ${error}`);
+  //       }
+  //   } else {
+  //       printErrorMessage('Operation failed. Invalid input. Please provide a directory path.');
+  //   }
+  //   printCurrentDirectory();
+  //   promptUser();
+  //   break;
+
+  // cd
+case 'cd':
+  processCommand(input, async (directoryPath) => {
+    try {
+      navigateToDirectory(directoryPath);
+    } catch (error) {
+      printErrorMessage(`Operation Failed: ${error}`);
     }
-    printCurrentDirectory();
-    promptUser();
-    break;
-
-
+  }, 'cd', 2, 2);
+  break;
 
 
   // ls
@@ -78,10 +87,6 @@ export const processUserInput = async (input) => {
       break;
 
  // Cat
-
-
-
-
 
     // case 'cat':
     //   const catArgs = input.match(/cat\s+(.+)/);
@@ -99,71 +104,15 @@ export const processUserInput = async (input) => {
     //   promptUser();
     //   break;
 
-    case 'cat':
-  processCommand(input, async (filePath) => {
-    try {
-      await catFile(filePath);
-    } catch (error) {
-      printErrorMessage(`Operation Failed: ${error.message}, no such file "${filePath}"`);
-    }
-  }, 'cat', 2, 2);
-  break;
-
-//     case 'add':
-//       if (args.length < 2) {
-//         printErrorMessage('Operation failed. Invalid usage of "add" command. Please provide a new filename.');
-//       } else {
-//         const newFilename = args.slice(1).join(' ');
-//         await createEmptyFile(newFilename);
-//       }
-//       printCurrentDirectory();
-//       promptUser();
-//       break;
-
-// // rename
-// case 'rn':
-//   const argsRn = input.match(/(?:[^\s'"]+|"[^"]*"|'[^']*')+/g);
-//   console.log(argsRn);
-//   if (argsRn.length < 3) {
-//       printErrorMessage('Operation failed. Invalid usage of "rn" command. Please provide a file path and a new filename.');
-//   } else {
-//       const filePathRn = argsRn[1].replace(/^['"]|['"]$/g, '');
-//       const newFilenameRn = argsRn[2].replace(/^['"]|['"]$/g, '');
-//       await renameFile(filePathRn, newFilenameRn);
-//   }
-//   printCurrentDirectory();
-//   promptUser();
-//   break;
-
-// // copy
-// case 'cp':
-//   const argsCp = input.match(/(?:[^\s'"]+|"[^"]*"|'[^']*')+/g);
-//   console.log(argsCp);
-//   if (argsCp.length < 3) {
-//       printErrorMessage('Operation failed. Invalid usage of "cp" command. Please provide a source file path and a target directory path.');
-//   } else {
-//       const sourcePath = argsCp[1].replace(/^['"]|['"]$/g, '');
-//       const targetDirectory = argsCp[2].replace(/^['"]|['"]$/g, '');
-//       await cp(sourcePath, targetDirectory);
-//   }
-//   printCurrentDirectory();
-//   promptUser();
-//   break;
-
-// // move
-//  case 'mv':
-//     const argsMv = input.match(/(?:[^\s'"]+|'[^']*'|"[^"]*")+/g);
-//     // console.log(argsMv);
-//     if (argsMv.length !== 3) {
-//         printErrorMessage('Operation failed. Invalid usage of "mv" command. Please provide a source file path and a target directory path.');
-//     } else {
-//         const sourcePathMv = argsMv[1].replace(/^['"]|['"]$/g, '');
-//         const targetDirectoryMv = argsMv[2].replace(/^['"]|['"]$/g, '');
-//         await mv(sourcePathMv, targetDirectoryMv);
-//     }
-//     printCurrentDirectory();
-//     promptUser();
-//     break;
+  case 'cat':
+      processCommand(input, async (filePath) => {
+        try {
+          await catFile(filePath);
+        } catch (error) {
+          printErrorMessage(`Operation Failed: ${error.message}, no such file "${filePath}"`);
+        }
+      }, 'cat', 2, 2);
+      break;
 
 // Add
 case 'add':
