@@ -105,17 +105,32 @@ export const processUserInput = async (input) => {
       promptUser();
       break;
 
-  case 'rn':
-      if (args.length < 3) {
-        printErrorMessage('Operation failed. Invalid usage of "rn" command. Please provide a file path and a new filename.');
-      } else {
-        const filePath = args.slice(1, -1).join(' ');
-        const newFilename = args[args.length - 1];
-        await renameFile(filePath, newFilename);
-      }
-      printCurrentDirectory();
-      promptUser();
-      break;
+  // case 'rn':
+  //     if (args.length < 3) {
+  //       printErrorMessage('Operation failed. Invalid usage of "rn" command. Please provide a file path and a new filename.');
+  //     } else {
+  //       const filePath = args.slice(1, -1).join(' ');
+  //       const newFilename = args[args.length - 1];
+  //       await renameFile(filePath, newFilename);
+  //     }
+  //     printCurrentDirectory();
+  //     promptUser();
+  //     break;
+  // move
+case 'rn':
+  const argsRn = input.match(/(?:[^\s'"]+|"[^"]*"|'[^']*')+/g);
+  console.log(argsRn);
+  if (argsRn.length < 3) {
+      printErrorMessage('Operation failed. Invalid usage of "rn" command. Please provide a file path and a new filename.');
+  } else {
+      const filePathRn = argsRn[1].replace(/^['"]|['"]$/g, '');
+      const newFilenameRn = argsRn[2].replace(/^['"]|['"]$/g, '');
+      await renameFile(filePathRn, newFilenameRn);
+  }
+  printCurrentDirectory();
+  promptUser();
+  break;
+
 
 
 // copy
