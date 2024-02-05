@@ -183,4 +183,3 @@ export const printErrorMessage = (message) => {
     redErrorMessage(`${message}`, '31');
 
   }
-ima
