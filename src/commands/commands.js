@@ -9,11 +9,13 @@ import { cp, mv } from '../commands/copyMove.js';
 import { removeFile } from '../commands/remove.js';
 import { rl } from '../interface/readline.js';
 import { printCurrentDirectory } from '../directory/workDirectory.js';
+import { printEOL, printCPUsInfo, printHomeDir, printUsername , printCPUArchitecture  } from '../os/os.js';
+
 
 
 export const processUserInput = async (input) => {
 
-  const command = input.trim().toLowerCase();
+  const command = input.trim();
   const args = command.split(' ');
 
   switch (args[0]) {
@@ -94,6 +96,41 @@ case 'rm':
     }
   }, 'rm', 2, 2);
   break;
+
+  // OS
+  case 'os':
+  const osCommand = args[1];
+  // console.log("ARGS OS : ", args )
+  switch (osCommand) {
+    case '--EOL':
+      printEOL();
+      break;
+    case '--cpus':
+      printCPUsInfo();
+      break;
+    case '--homedir':
+      printHomeDir();
+      break;
+    case '--username':
+      printUsername();
+      break;
+    case '--architecture':
+      printCPUArchitecture();
+      break;
+    default:
+      if (osCommand === undefined) {
+        printErrorMessage('Invalid usage of "os" command. Please provide a valid option (--EOL, --cpus, --homedir, --username, --architecture).');
+      } else {
+        printErrorMessage(`Invalid option "${osCommand}" for "os" command. Please provide a valid option (--EOL, --cpus, --homedir, --username, --architecture).`);
+      }
+      break;
+  }
+  printCurrentDirectory();
+  console.log('\x1b[34m%s\x1b[0m', '-----');
+  promptUser();
+  break;
+
+
 
 //default
     default:
