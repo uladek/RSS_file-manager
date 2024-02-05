@@ -12,10 +12,11 @@ import { rl } from '../interface/readline.js';
 import {  printCurrentDirectory } from '../directory/workDirectory.js';
 
 export const processUserInput = async (input) => {
-  const command = input.trim().toLowerCase();
-  const args = command.split(' ');
 
-  switch (args[0]) {
+    const command = input.trim().toLowerCase();
+    const args = command.split(' ');
+
+    switch (args[0]) {
 
     case '.exit':
       rl.close();
@@ -35,20 +36,39 @@ export const processUserInput = async (input) => {
       break;
 
 // cd
-   case 'cd':
+  //  case 'cd':
+  //   if (args.length > 1) {
+  //     const directoryPath = args.slice(1).join(' ');
+  //     try {
+  //       navigateToDirectory(directoryPath);
+  //     } catch (error) {
+  //       printErrorMessage(`Operation Failed: ${error}`);
+  //     }
+  //   } else {
+  //     printErrorMessage('Operation failed. Invalid input. Please provide a directory path.');
+  //   }
+  //   printCurrentDirectory();
+  //   promptUser();
+  //   break;
+  // ...
+
+  case 'cd':
     if (args.length > 1) {
-      const directoryPath = args.slice(1).join(' ');
-      try {
-        navigateToDirectory(directoryPath);
-      } catch (error) {
-        printErrorMessage(`Operation Failed: ${error}`);
-      }
+        const directoryPath = args.slice(1).join(' ');
+        try {
+            navigateToDirectory(directoryPath);
+        } catch (error) {
+            printErrorMessage(`Operation Failed: ${error}`);
+        }
     } else {
-      printErrorMessage('Operation failed. Invalid input. Please provide a directory path.');
+        printErrorMessage('Operation failed. Invalid input. Please provide a directory path.');
     }
     printCurrentDirectory();
     promptUser();
     break;
+
+
+
 
   // ls
     case 'ls':
@@ -100,13 +120,13 @@ export const processUserInput = async (input) => {
 
 // copy
 case 'cp':
-  const args = input.match(/(?:[^\s'"]+|"[^"]*"|'[^']*')+/g);
-  console.log(args);
-  if (args.length < 3) {
+  const argsCp = input.match(/(?:[^\s'"]+|"[^"]*"|'[^']*')+/g);
+  console.log(argsCp);
+  if (argsCp.length < 3) {
       printErrorMessage('Operation failed. Invalid usage of "cp" command. Please provide a source file path and a target directory path.');
   } else {
-      const sourcePath = args[1].replace(/^['"]|['"]$/g, '');
-      const targetDirectory = args[2].replace(/^['"]|['"]$/g, '');
+      const sourcePath = argsCp[1].replace(/^['"]|['"]$/g, '');
+      const targetDirectory = argsCp[2].replace(/^['"]|['"]$/g, '');
       await cp(sourcePath, targetDirectory);
   }
   printCurrentDirectory();
@@ -116,36 +136,24 @@ case 'cp':
 
 
 // move
-  // case 'mv':
-  //     if (args.length !== 3) {
-  //       printErrorMessage('Operation failed. Invalid usage of "mv" command. Please provide a source file path and a target directory path.');
-  //     } else {
-  //       const sourcePath = args[1];
-  //       const targetDirectory = args[2];
-  //       await mv(sourcePath, targetDirectory);
-  //     }
-  //     printCurrentDirectory();
-  //     promptUser();
-  //     break;
-  case 'mv':
+
+ case 'mv':
     const argsMv = input.match(/(?:[^\s'"]+|'[^']*'|"[^"]*")+/g);
 
-    console.log(argsMv);
+    // console.log(argsMv);
     if (argsMv.length !== 3) {
         printErrorMessage('Operation failed. Invalid usage of "mv" command. Please provide a source file path and a target directory path.');
     } else {
         const sourcePathMv = argsMv[1].replace(/^['"]|['"]$/g, '');
         const targetDirectoryMv = argsMv[2].replace(/^['"]|['"]$/g, '');
 
-        console.log("sourcePath", sourcePathMv);
-        console.log("targetDirectory", targetDirectoryMv);
+        // console.log("sourcePath", sourcePathMv);
+        // console.log("targetDirectory", targetDirectoryMv);
         await mv(sourcePathMv, targetDirectoryMv);
     }
     printCurrentDirectory();
     promptUser();
     break;
-
-
 
 
 //default
