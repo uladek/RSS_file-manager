@@ -25,6 +25,7 @@ export const processUserInput = async (input) => {
   case '.exit':
     rl.close();
     break;
+
   case '':
     printErrorMessage('Operation failed. Empty input. Please enter command.');
     printCurrentDirectory();
@@ -32,23 +33,23 @@ export const processUserInput = async (input) => {
     break;
 
 // up
-case 'up':
-case 'cd ..':
+  case 'up':
+  case 'cd ..':
     navigateUp();
     printCurrentDirectory();
     promptUser();
     break;
 
 // cd
-case 'cd':
-  processCommand(input, async (directoryPath) => {
-    try {
-      navigateToDirectory(directoryPath);
-    } catch (error) {
-      printErrorMessage(`Operation Failed: ${error}`);
-    }
-  }, 'cd', 2, 2);
-  break;
+  case 'cd':
+    processCommand(input, async (directoryPath) => {
+      try {
+        navigateToDirectory(directoryPath);
+      } catch (error) {
+        printErrorMessage(`Operation Failed: ${error}`);
+      }
+    }, 'cd', 2, 2);
+    break;
 
 // ls
   case 'ls':
@@ -68,35 +69,36 @@ case 'cd':
       }, 'cat', 2, 2);
       break;
 
-// Add
-case 'add':
-  processCommand(input, createEmptyFile, 'add', 1, 2);
-  break;
+  // Add
+  case 'add':
+    processCommand(input, createEmptyFile, 'add', 1, 2);
+    break;
 
-// Rename
-case 'rn':
-  processCommand(input, renameFile, 'rn', 2, 3);
-  break;
+  // Rename
+  case 'rn':
+    processCommand(input, renameFile, 'rn', 2, 3);
+    break;
 
-// Copy
-case 'cp':
-  processCommand(input, cp, 'cp', 2, 3);
-  break;
+  // Copy
+  case 'cp':
+    processCommand(input, cp, 'cp', 2, 3);
+    break;
 
-// Move
-case 'mv':
-  processCommand(input, mv, 'mv', 2, 3);
-  break;
+  // Move
+  case 'mv':
+    processCommand(input, mv, 'mv', 2, 3);
+    break;
+
   // Remove
-case 'rm':
-  processCommand(input, async (filePath) => {
-    try {
-      await removeFile(filePath);
-    } catch (error) {
-      printErrorMessage(`Operation Failed: ${error}`);
-    }
-  }, 'rm', 2, 2);
-  break;
+  case 'rm':
+    processCommand(input, async (filePath) => {
+      try {
+        await removeFile(filePath);
+      } catch (error) {
+        printErrorMessage(`Operation Failed: ${error}`);
+      }
+    }, 'rm', 2, 2);
+    break;
 
   // OS
   case 'os':
@@ -106,18 +108,23 @@ case 'rm':
     case '--EOL':
       printEOL();
       break;
+
     case '--cpus':
       printCPUsInfo();
       break;
+
     case '--homedir':
       printHomeDir();
       break;
+
     case '--username':
       printUsername();
       break;
+
     case '--architecture':
       printCPUArchitecture();
       break;
+
     default:
       if (osCommand === undefined) {
         printErrorMessage('Invalid usage of "os" command. Please provide a valid option (--EOL, --cpus, --homedir, --username, --architecture).');

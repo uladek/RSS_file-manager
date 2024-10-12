@@ -12,17 +12,16 @@ export const listDirectoryContent = async () => {
     await Promise.all(
       directoryContent.map(async (item) => {
         const fullPath = path.join(currentDirectory, item);
-        const stats = await stat(fullPath);
 
+        const stats = await stat(fullPath);
+// stats ...info about fle or directory
         const itemType = stats.isDirectory() ? 'Directory' : 'File';
         items.push({ Name: item, Type: itemType });
       })
     );
 
      items.sort((a, b) => a.Name.localeCompare(b.Name));
-
      console.table(items);
-
 
   } catch (error) {
     printErrorMessage(`Operation Failed. Error listing directory content: ${error.message}`);

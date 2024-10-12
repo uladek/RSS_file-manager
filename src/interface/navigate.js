@@ -1,5 +1,5 @@
 import path from 'path';
-import {  printErrorMessage } from '../commands/commands.js';
+import { printErrorMessage } from '../commands/commands.js';
 
 
 export const navigateUp = () => {
