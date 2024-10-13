@@ -3,30 +3,11 @@ import { createReadStream, createWriteStream, promises as fsPromises } from 'nod
 import { printErrorMessage } from '../commands/commands.js';
 import { unlink } from 'node:fs/promises';
 
-
-
-
-// export const createEmptyFile = async (filename) => {
-//   try {
-//     await access(filename);
-
-//     printErrorMessage(`Operation failed: File "${filename}" already exists.`);
-
-//   } catch (accessError) {
-//     try {
-//       await writeFile(filename, '');
-//       console.log(`Empty file "${filename}" created successfully.`);
-//     } catch (Error) {
-//       printErrorMessage(`Operation failed. Error creating empty file: ${Error.message}`);
-//     }
-//   }
-// };
-
 export const cp = async (sourcePath, targetDirectory) => {
   return new Promise(async (resolve) => {
 
     // промис для последовательного выполнеря перед
-    //  printCurrentDirectory();
+    // printCurrentDirectory();
     // promptUser();
     const targetPath = `${targetDirectory}/${sourcePath.split('/').pop()}`;
 
@@ -80,6 +61,8 @@ export const mv = async (sourcePath, targetDirectory) => {
     let errorHandled = false;
 
     const sourceStream = createReadStream(sourcePath);
+    // also ckeck if exists 'sourcePath'
+
     const targetStream = createWriteStream(targetPath);
 
     sourceStream
@@ -91,6 +74,8 @@ export const mv = async (sourcePath, targetDirectory) => {
         }
       })
       .pipe(targetStream)
+      // copy file
+
       .on('error', async (error) => {
         if (!errorHandled) {
           printErrorMessage(`Operation Failed: Unable to move file to "${targetDirectory}".`);
