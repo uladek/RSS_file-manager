@@ -3,15 +3,41 @@ import { createReadStream, createWriteStream, promises as fsPromises } from 'nod
 import { printErrorMessage } from '../commands/commands.js';
 import { unlink } from 'node:fs/promises';
 
+
+
+
+// export const createEmptyFile = async (filename) => {
+//   try {
+//     await access(filename);
+
+//     printErrorMessage(`Operation failed: File "${filename}" already exists.`);
+
+//   } catch (accessError) {
+//     try {
+//       await writeFile(filename, '');
+//       console.log(`Empty file "${filename}" created successfully.`);
+//     } catch (Error) {
+//       printErrorMessage(`Operation failed. Error creating empty file: ${Error.message}`);
+//     }
+//   }
+// };
+
 export const cp = async (sourcePath, targetDirectory) => {
   return new Promise(async (resolve) => {
+
+    // промис для последовательного выполнеря перед
+    //  printCurrentDirectory();
+    // promptUser();
     const targetPath = `${targetDirectory}/${sourcePath.split('/').pop()}`;
 
     try {
       await fsPromises.access(targetPath);
       printErrorMessage(`Operation Failed: File "${targetPath}" already exists in the target directory.`);
-      resolve();
-    } catch (error) {
+      // resolve();
+      return resolve()
+    } catch {
+
+      try {
       const sourceStream = createReadStream(sourcePath);
       const targetStream = createWriteStream(targetPath);
 
@@ -36,10 +62,13 @@ export const cp = async (sourcePath, targetDirectory) => {
       });
 
       sourceStream.pipe(targetStream);
-    }
-  });
+    } catch (copyError) {
+      printErrorMessage(`Operation Failed during copy: ${copyError.message}`);
+      resolve();
+    };
+  };
+});
 };
-
 
 
 
